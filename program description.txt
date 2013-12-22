@@ -1,4 +1,97 @@
 程序功能描述：
 	程序的主要目的是协助局域网内的主机获取另外一台局域网内的主机ip地址和端口。让两台局域网内的主机能够自由地进行UDP通信。
 	提供的服务有：
-		1）客户端可以获取自身
+		1）客户机注册穿透服务
+		2）客户端可以获取自身的外部ip地址和端口
+		3）客户端可以获取指定的主机的外部ip地址和端口
+		4）可以手动录入客户机IP
+		5）处理客户机的心跳
+	
+程序主要的数据结构：
+
+用于记录客户机信息
+class CClientInfo{
+成员变量：
+	客户机ID；
+	客户机签名；	
+	客户机状态；
+	客户机IP地址；
+	客户机端口；
+	心跳间隔；
+操作函数：
+	各个成员变量的set和get函数。
+}
+
+class Cmd{
+成员变量：
+	客户机ID；
+	客户机签名；
+	命令类型；
+	命令内容；
+操作函数：
+	格式化命令-Serailze：将对象的内容格式化成char数组；
+	解析命令-Parse：将char数据解析成命令对象；
+	各个成员变量的get和set函数；
+}
+
+用于记录注册穿透服务的所有客户机
+class CClientTable{	
+操作函数：
+	初始化客户机列表-initClientTable();
+	添加客户机-addClient；
+	删除客户机-deleteClient；
+	查找客户机-searchClient；
+	遍历列表中的所有客户机-first-next-end；
+}
+
+class CFactory{
+	生成客户机列表对象函数-createClientTable：
+	生成接收和发送数据socket-createSocket；
+}
+
+用于表示穿透局域网服务的对象
+class CPenetratingFirewall
+{
+成员变量：
+	客户机表；
+	用于接收请求和发送数据的socket；
+公有操作函数：
+	初始化函数-init：初始化客户机列表和创建接收和发送数据的socket；
+	验证客户机身份-verifyClient:
+	接受请求函数-recvCmd:
+	处理请求函数-disposeCmd：
+	获取客户机列表-getClientTable:
+受保护操作函数：
+	处理注册命令-disposeRegisterCmd；
+	处理客户端获取自身对外IP和端口命令-disposeGetIPandPortCmd；
+	处理客户机获取指定客户机对外的IP和端口命令-disposeGetPeerIPandPortCmd；
+	处理客户机的心跳命令-disposeHeartbeatCmd；
+}
+
+程序主函数：
+main()
+{
+	定义工厂变量factory；
+	用工厂变量创建客户机列表变量pClientTable；
+	用工厂变量创建socket变量pSocket；
+	定应穿透局域网服务变量pentratingFirewall；
+	用pClientTable和pSocket初始化pentratingFirewall变量；
+	while(true){
+		
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
