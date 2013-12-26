@@ -37,16 +37,28 @@ class Cmd{
 用于记录注册穿透服务的所有客户机
 class CClientTable{	
 操作函数：
-	初始化客户机列表-initClientTable();
-	添加客户机-addClient；
-	删除客户机-deleteClient；
-	查找客户机-searchClient；
-	遍历列表中的所有客户机-first-next-end；
+	初始化客户机列表-InitClientTable();
+	添加客户机-AddClient；
+	删除客户机-DeleteClient；
+	查找客户机-SearchClient；
+	或者指定位置的客户机信息-GetClientByIndex；
+	获取客户机的个数-GetClientCount；
+}
+
+用于遍历ClientTable的迭代器
+class CIterator{
+public操作函数：
+	判断迭代是否已经结束-IsDone；
+	设置迭代器指向起始位置-First；
+	设置迭代器指向当前元素的下一个-Next；
+	获取当前元素-GetCurrentItem；
+私有成员变量：
+	记录当前访问到的元素位置-currentIndex；
 }
 
 class CFactory{
-	生成客户机列表对象函数-createClientTable：
-	生成接收和发送数据socket-createSocket；
+	生成客户机列表对象函数-CreateClientTable：
+	生成接收和发送数据socket-CreateSocket；
 }
 
 用于表示穿透局域网服务的对象
