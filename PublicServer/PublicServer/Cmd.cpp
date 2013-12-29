@@ -1,46 +1,72 @@
 #include "PublicServer/Cmd.h"
 
-bool Cmd::getId(int &rtId)
+CCmd::CCmd(int paramId = -1，string paramSignature = “”，int paramType = -1, string paramMessage = "")
+:id(paramId),
+ signature(paramSignature),
+ type(paramType),
+ message(paramMessage)
+{
+
+}
+
+CCmd::CCmd(const CCmd& paramCmd)
+{
+	id = paramCmd.id;
+	signature = paramCmd.signature;
+	type = paramCmd.type;
+	message = paramCmd.message;	
+}
+
+CCmd::CCmd & operator=(const CCmd & paramCmd)
+{
+	id = paramCmd.id;
+	signature = paramCmd.signature;
+	type = paramCmd.type;
+	message = paramCmd.message;	
+	return *this;
+}
+
+bool CCmd::getId(int &rtId)
 {
     rtId = id;
     return true;
 }
-bool Cmd::setId(const int &paramId)
+bool CCmd::setId(const int &paramId)
 {
     id = paramId;
     return true;
 }
 
-bool Cmd::getSignature(string &rtSignature)
+bool CCmd::getSignature(string &rtSignature)
 {
     rtSignature = signature;
     return true;
 }
 
-bool Cmd::setSignature(const string &paramSignature)
+bool CCmd::setSignature(const string &paramSignature)
 {
     signature = paramSignature;
     return true;
 }
 
-bool Cmd::getType(int &rtType)
+bool CCmd::getType(int &rtType)
 {
     rtType = type;
     return true;
 }
-bool Cmd::setType(const int &paramType)
+bool CCmd::setType(const int &paramType)
 {
     type = paramType;
     return true;
 }
 
-bool Cmd::getMessage(string &rtMessage)
+bool CCmd::getMessage(string &rtMessage)
 {
     rtMessage = message;
     return true;
 }
 
-bool Cmd::setMessage(const string &paramMessage)
+bool CCmd::setMessage(const string &paramMessage)
 {
     message = paramMessage;
     return true;
@@ -48,7 +74,7 @@ bool Cmd::setMessage(const string &paramMessage)
 
 
 //	格式化命令-Serialize：将对象的内容格式化成char数组；
-bool Cmd::Serialize(char *rtBuf, const int &len)
+bool CCmd::Serialize(char *rtBuf, const int &len)
 {
     return false;
 }

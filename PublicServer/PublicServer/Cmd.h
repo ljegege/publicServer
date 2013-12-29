@@ -1,6 +1,6 @@
 #include <string>
 using namespace std;
-class Cmd{
+class CCmd{
 //成员变量：
 //	客户机ID；
     int id;
@@ -10,6 +10,10 @@ class Cmd{
     int type;
 //	命令内容；
     string message;
+// 构造函数
+    CCmd(int id = -1，string signature = “”，int type = -1, string message = "");
+    CCmd(const CCmd& paramCmd);
+    CCmd & operator=(const CCmd & paramCmd);
 //操作函数：
 //	各个成员变量的get和set函数；
     inline bool getId(int &rtId);

@@ -14,4 +14,5 @@ abstract class CClientTable{
 	virtual bool GetClientByIndex(const int & index, CClientInfo &rtClientInfo) = 0;	
 //	获取客户机的个数-GetClientCount；
 	virtual bool GetClientCount(int & rtCount) = 0;	
+	virtual bool Clear() = 0;
 }
