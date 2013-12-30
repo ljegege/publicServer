@@ -1,4 +1,9 @@
-#include "PublicServer/ClientTable.h"
+﻿#pragma once 
+#ifndef CLIENT_VECTOR_TABLE_PENETRATE
+#define CLIENT_VECTOR_TABLE_PENETRATE
+#include "ClientTable.h"
+#include <vector>
+
 //用于记录注册穿透服务的所有客户机
 class CClientVectorTable:public CClientTable
 {
@@ -13,10 +18,12 @@ public:
 //	删除客户机-DeleteClient；
 	virtual bool DeleteClient(const int & paramId);
 //	查找客户机-SearchClient；
-	virtual bool SearchClient(const int & paramId, CClientInfo &rtClientInfo);
+	virtual bool SearchClient(const int & paramId, CClientInfo & rtClientInfo);
 //	或者指定位置的客户机信息-GetClientByIndex；
-	virtual bool GetClientByIndex(const int & index, CClientInfo &rtClientInfo);	
+	virtual bool GetClientByIndex(const int & index, CClientInfo & rtClientInfo);	
 //	获取客户机的个数-GetClientCount；
 	virtual bool GetClientCount(int & rtCount);	
 	virtual bool Clear();
 };
+
+#endif

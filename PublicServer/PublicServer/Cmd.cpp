@@ -1,6 +1,5 @@
-#include "PublicServer/Cmd.h"
-
-CCmd::CCmd(int paramId = -1，string paramSignature = “”，int paramType = -1, string paramMessage = "")
+﻿#include "Cmd.h"
+CCmd::CCmd(int paramId, string paramSignature, int paramType, string paramMessage)
 :id(paramId),
  signature(paramSignature),
  type(paramType),
@@ -17,7 +16,7 @@ CCmd::CCmd(const CCmd& paramCmd)
 	message = paramCmd.message;	
 }
 
-CCmd::CCmd & operator=(const CCmd & paramCmd)
+CCmd & CCmd::operator=(const CCmd & paramCmd)
 {
 	id = paramCmd.id;
 	signature = paramCmd.signature;
@@ -73,15 +72,73 @@ bool CCmd::setMessage(const string &paramMessage)
 }
 
 
-//	格式化命令-Serialize：将对象的内容格式化成char数组；
-bool CCmd::Serialize(char *rtBuf, const int &len)
+//	格式化命令-Serialize：将对象的内容格式化成char数组
+bool CCmd::Serialize(char *rtBuf, int &len)
 {
-    return false;
+	memcpy(rtBuf, 0, len);
+
+	int serializeLen = 0;
+	int dataLen = sizeof(id);
+	
+	if(len < serializeLen + dataLen){
+		return false;
+	}
+	memcpy(rtBuf, &id, dataLen);
+	serializeLen += dataLen;
+
+	dataLen = signature.size();
+	if(len < serializeLen + dataLen  + sizeof(int)){
+		return false;
+	}
+	memcpy(rtBuf + serializeLen, &dataLen,  + sizeof(int));	
+	serializeLen += sizeof(int);
+
+	memcpy(rtBuf + serializeLen, signature.c_str(),  + dataLen);	
+	serializeLen += dataLen;
+
+	dataLen = sizeof(type);
+	if(len < serializeLen + dataLen){
+		return false;
+	}
+	memcpy(rtBuf + serializeLen, &type, dataLen);
+	serializeLen += dataLen;
+
+	dataLen = message.size();
+	if(len < serializeLen + dataLen + sizeof(int)){
+		return false;
+	}
+	memcpy(rtBuf + serializeLen, &dataLen,  + sizeof(int));	
+	serializeLen += sizeof(int);
+
+	memcpy(rtBuf + serializeLen, message.c_str(), dataLen);
+	len = serializeLen + dataLen;
+
+    return true;
 }
-//	解析命令-Parse：将char数据解析成命令对象；
-bool Parse(const char *ptrData, const int &len);
+
+//	解析命令-Parse：将char数据解析成命令对象
+bool CCmd::Parse(const char *ptrData, const int &len)
 {
-    return false;
+	int parseLen = 0;
+	int dataLen = 0;
+	id = *(int *)ptrData;
+	parseLen += sizeof(int);
+
+	dataLen = *(int *)(ptrData + parseLen);
+	parseLen += sizeof(int);
+
+	signature.clear();
+	signature.append(ptrData + parseLen, dataLen);
+	parseLen += dataLen;
+
+	type = *(int *)(ptrData + parseLen);
+	parseLen += sizeof(int);
+
+	dataLen = *(int *)(ptrData + parseLen);
+	message.clear();
+	message.append(ptrData + parseLen, dataLen);
+	
+    return true;
 }
 
 

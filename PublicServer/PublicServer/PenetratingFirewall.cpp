@@ -1,45 +1,97 @@
-bool Init()
+﻿#include "PenetratingFirewall.h"
+#include "ClientTable.h"
+bool CPenetratingFirewall::Init(string initFilePath)
 {
 	return false;
 }
 //验证客户机身份-VerifyClient:
-bool VerifyClient(const CClientInfo &clientInfo)
+bool CPenetratingFirewall::VerifyClient(CClientInfo &clientInfo) const
 {
-	return false;
+	//
+	//CIterator clientTableIterator(ptrClientTable);
+	//for(clientTableIterator.First(); !clientTableIterator.IsDone(); clientTableIterator.Next()){
+	//	clientTableIterator.GetCurrentItem(tmpClientInfo);
+	//	
+	//}
+	int clientID;
+	CClientInfo tmpClientInfo;
+	clientInfo.GetId(clientID);
+	string clientTableSig;
+	string paramSig;
+
+	if(!ptrClientTable->SearchClient(clientID, tmpClientInfo)){
+		return false;
+	}
+
+	tmpClientInfo.GetSignature(clientTableSig);
+	clientInfo.GetSignature(paramSig);
+	if(clientTableSig.compare(paramSig) == 0){
+		return true;
+	}else {
+		return false;
+	}
+	
 }
 //接受请求函数-RecvCmd:
-bool RecvCmd(CClientInfo &clientInfo)
+bool CPenetratingFirewall::RecvCmd(CCmd& cmd)
 {
-	return false;
+	char buf[maxCmdLen];
+	int bufLen = maxCmdLen;
+	string ip;
+	int port;
+	if(ptrSock->Recvfrom(buf, bufLen, &ip, &port) > 0){
+		return cmd.Parse(buf, bufLen);
+	}else{
+		return false;
+	}
 }
 //处理请求函数-DisposeCmd：
-bool DisposeCmd(CClientInfo &clientInfo)
+bool CPenetratingFirewall::DisposeCmd(CCmd& cmd)
 {
-	return false;
+	int type;
+	cmd.getType(type);
+	switch(type){
+	case enumRegisterCmd:
+		{
+			return DisposeRegisterCmd(cmd);	 
+		}
+	case enumIpPort:
+		{
+			return DisposeGetIPandPortCmd(cmd);
+		}
+	case enumPeerIpPort:
+		{
+			return DisposeGetPeerIPandPortCmd(cmd);
+		}
+	default:
+		{
+			return false;
+		}
+	}
 }
 //获取客户机列表-GetClientTable:
-CClientInfo & GetClientTable()
+CClientTable * CPenetratingFirewall::GetClientTable()
 {
-	return false;
+	return ptrClientTable;
 }
 
 //处理注册命令-DisposeRegisterCmd；
-bool DisposeRegisterCmd(const CCmd& cmd)
+bool DisposeRegisterCmd(CCmd& cmd)
 {
 	return false;
 }
 //处理客户端获取自身对外IP和端口命令-DisposeGetIPandPortCmd
-bool DisposeGetIPandPortCmd(const CCmd& cmd)
+bool DisposeGetIPandPortCmd(CCmd& cmd)
 {
 	return false;
 }
 //处理客户机获取指定客户机对外的IP和端口命令-DisposeGetPeerIPandPortCmd；
-bool DisposeGetPeerIPandPortCmd(const CCmd& cmd)
+bool DisposeGetPeerIPandPortCmd(CCmd& cmd)
 {
 	return false;
 }
 //处理客户机的心跳命令-DisposeHeartbeatCmd；
-bool DisposeHeartbeatCmd(const CCmd& cmd)
+bool DisposeHeartbeatCmd(CCmd& cmd)
 {
 	return false;
 }

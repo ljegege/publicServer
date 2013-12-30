@@ -1,3 +1,6 @@
+﻿#pragma once 
+#ifndef	CLIENTINF_PENETRATE
+#define CLIENTINF_PENETRATE
 #include <string>
 using namespace std;
 
@@ -5,7 +8,6 @@ using namespace std;
 class CClientInfo{
 //成员变量：
 private:
-//	客户机ID；
     int id;
 //	客户机签名；
     string signature;
@@ -19,7 +21,7 @@ private:
     int heartbeatInterval;
 public:
 // 构造函数
-    CClientInfo(int id = -1，string signature = “”，int state = -1，string ip = “”，int port = -1, int heartbeatInterval = -1);
+    CClientInfo(int paramId = -1,string paramSignature = "", int paramState = -1, string paramIp = "", int paramPort = -1, int paramHeartbeatInterval = -1);
     CClientInfo(const CClientInfo& clientInfo);
     CClientInfo & operator=(const CClientInfo & paramClientInfo);
 //操作函数：
@@ -43,3 +45,4 @@ public:
     inline bool SetHeartbeatInterval(const int &paramHeartbeat);
 
 };
+#endif

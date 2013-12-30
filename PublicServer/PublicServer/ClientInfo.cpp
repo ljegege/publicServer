@@ -1,6 +1,6 @@
-#include "PublicServer/ClientInfo.h"
+﻿#include "ClientInfo.h"
 
-CClientInfo::CClientInfo(int paramId = -1，string paramSignature = “”，int paramState = -1，string paramIp = “”，int paramPort = -1, int paramHeartbeatInterval = -1)
+CClientInfo::CClientInfo(int paramId,string paramSignature, int paramState, string paramIp, int paramPort, int paramHeartbeatInterval)
 :id(paramId),
  signature(paramSignature),
  state(paramState),
@@ -21,7 +21,7 @@ CClientInfo::CClientInfo(const CClientInfo& paramClientInfo)
  	heartbeatInterval = paramClientInfo.heartbeatInterval;	
 }
 
-CClientInfo & operator=(const CClientInfo & paramClientInfo)
+CClientInfo & CClientInfo::operator=(const CClientInfo & paramClientInfo)
 {
 	id = paramClientInfo.id;
  	signature = paramClientInfo.signature;
@@ -89,7 +89,7 @@ bool CClientInfo::SetPort(const int &paramPort)
 
 bool CClientInfo::GetHeartbeatInterval(int &rtHeartbeat)
 {
-    rtHeartbeat = heartbeat;
+	rtHeartbeat = heartbeatInterval;
     return true;
 }
 

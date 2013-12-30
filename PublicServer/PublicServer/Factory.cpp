@@ -1,4 +1,7 @@
-    //生成客户机列表对象函数-CreateClientTable：
+﻿#include "Factory.h"
+#include "ClientVectorTable.h"
+#include "Type.h"
+//生成客户机列表对象函数-CreateClientTable：
 CClientTable *CreateClientTable(int type)
 {
 	switch(type){
