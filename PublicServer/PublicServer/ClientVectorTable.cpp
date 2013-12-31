@@ -27,33 +27,30 @@ bool CClientVectorTable::DeleteClient(const int & paramId)
 }
 
 //	查找客户机-SearchClient；
-bool CClientVectorTable::SearchClient(const int & paramId, CClientInfo &rtClientInfo)
+CClientInfo * CClientVectorTable::SearchClient(const int & paramId)
 {
-	for(vector<CClientInfo>::iterator iterClient = clientInfoVec.begin(); iterClient != clientInfoVec.end(); ++iterClient){
-		int rtId;			
-		if(iterClient->GetId(rtId) && rtId == paramId){
-			rtClientInfo = *iterClient;
-			return true;
+	for(vector<CClientInfo>::iterator iterClient = clientInfoVec.begin(); iterClient != clientInfoVec.end(); ++iterClient){		
+		if(iterClient->GetId == paramId){
+			return iterClient;
 		}
 	}
-	return false;	
+	return NULL;	
 }
 
 //	或者指定位置的客户机信息-GetClientByIndex
-bool CClientVectorTable::GetClientByIndex(const int & index, CClientInfo &rtClientInfo)
+CClientInfo * CClientVectorTable::GetClientByIndex(const int & index)
 {
 	if(index > clientInfoVec.size()){
-		return false;
+		return NULL;
 	}
-	rtClientInfo = clientInfoVec[index - 1];
-	return true;	
+	return &clientInfoVec[index - 1];	
 }	
 
 //	获取客户机的个数-GetClientCount
-bool CClientVectorTable::GetClientCount(int & rtCount)
+int CClientVectorTable::GetClientCount()
 {
-	rtCount = clientInfoVec.size();
-	return true;	
+	return clientInfoVec.size();
+	
 }
 
 bool CClientVectorTable::Clear()

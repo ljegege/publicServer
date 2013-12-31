@@ -40,6 +40,8 @@ bool CPenetratingFirewall::RecvCmd(CCmd& cmd)
 	string ip;
 	int port;
 	if(ptrSock->Recvfrom(buf, bufLen, &ip, &port) > 0){
+		cmd.SetIp(ip);
+		cmd.SetPort1(port);
 		return cmd.Parse(buf, bufLen);
 	}else{
 		return false;
@@ -49,7 +51,7 @@ bool CPenetratingFirewall::RecvCmd(CCmd& cmd)
 bool CPenetratingFirewall::DisposeCmd(CCmd& cmd)
 {
 	int type;
-	cmd.getType(type);
+	cmd.GetType(type);
 	switch(type){
 	case enumRegisterCmd:
 		{
@@ -76,22 +78,33 @@ CClientTable * CPenetratingFirewall::GetClientTable()
 }
 
 //处理注册命令-DisposeRegisterCmd；
-bool DisposeRegisterCmd(CCmd& cmd)
+bool CPenetratingFirewall::DisposeRegisterCmd(CCmd& cmd)
 {
+	int clientId;
+	CClientInfo clientInfo;
+	cmd.GetId(clientId);
+	if(ptrClientTable->SearchClient(clientId, clientInfo)){
+		string cmdSignature, clientSignagure;
+		cmd.getSignature(cmdSignature);
+		clientInfo.GetSignature(clientSignagure);
+		if(cmdSignature.compare(clientSignagure) == 0){
+
+		}
+	}
 	return false;
 }
 //处理客户端获取自身对外IP和端口命令-DisposeGetIPandPortCmd
-bool DisposeGetIPandPortCmd(CCmd& cmd)
+bool CPenetratingFirewall::DisposeGetIPandPortCmd(CCmd& cmd)
 {
 	return false;
 }
 //处理客户机获取指定客户机对外的IP和端口命令-DisposeGetPeerIPandPortCmd；
-bool DisposeGetPeerIPandPortCmd(CCmd& cmd)
+bool CPenetratingFirewall::DisposeGetPeerIPandPortCmd(CCmd& cmd)
 {
 	return false;
 }
 //处理客户机的心跳命令-DisposeHeartbeatCmd；
-bool DisposeHeartbeatCmd(CCmd& cmd)
+bool CPenetratingFirewall::DisposeHeartbeatCmd(CCmd& cmd)
 {
 	return false;
 }

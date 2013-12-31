@@ -1,9 +1,11 @@
 ﻿#include "Cmd.h"
-CCmd::CCmd(int paramId, string paramSignature, int paramType, string paramMessage)
+CCmd::CCmd(int paramId, string paramSignature, int paramType, string paramMessage, string paramIp, int paramPort)
 :id(paramId),
  signature(paramSignature),
  type(paramType),
- message(paramMessage)
+ message(paramMessage),
+ ip(paramIp),
+ port(paramPort)
 {
 
 }
@@ -24,53 +26,6 @@ CCmd & CCmd::operator=(const CCmd & paramCmd)
 	message = paramCmd.message;	
 	return *this;
 }
-
-bool CCmd::getId(int &rtId)
-{
-    rtId = id;
-    return true;
-}
-bool CCmd::setId(const int &paramId)
-{
-    id = paramId;
-    return true;
-}
-
-bool CCmd::getSignature(string &rtSignature)
-{
-    rtSignature = signature;
-    return true;
-}
-
-bool CCmd::setSignature(const string &paramSignature)
-{
-    signature = paramSignature;
-    return true;
-}
-
-bool CCmd::getType(int &rtType)
-{
-    rtType = type;
-    return true;
-}
-bool CCmd::setType(const int &paramType)
-{
-    type = paramType;
-    return true;
-}
-
-bool CCmd::getMessage(string &rtMessage)
-{
-    rtMessage = message;
-    return true;
-}
-
-bool CCmd::setMessage(const string &paramMessage)
-{
-    message = paramMessage;
-    return true;
-}
-
 
 //	格式化命令-Serialize：将对象的内容格式化成char数组
 bool CCmd::Serialize(char *rtBuf, int &len)
@@ -146,7 +101,52 @@ bool CCmd::Parse(const char *ptrData, const int &len)
 
 
 
-
+//
+//bool CCmd::getId(int &rtId)
+//{
+//    rtId = id;
+//    return true;
+//}
+//bool CCmd::setId(const int &paramId)
+//{
+//    id = paramId;
+//    return true;
+//}
+//
+//bool CCmd::getSignature(string &rtSignature)
+//{
+//    rtSignature = signature;
+//    return true;
+//}
+//
+//bool CCmd::setSignature(const string &paramSignature)
+//{
+//    signature = paramSignature;
+//    return true;
+//}
+//
+//bool CCmd::getType(int &rtType)
+//{
+//    rtType = type;
+//    return true;
+//}
+//bool CCmd::setType(const int &paramType)
+//{
+//    type = paramType;
+//    return true;
+//}
+//
+//bool CCmd::getMessage(string &rtMessage)
+//{
+//    rtMessage = message;
+//    return true;
+//}
+//
+//bool CCmd::setMessage(const string &paramMessage)
+//{
+//    message = paramMessage;
+//    return true;
+//}
 
 
 

@@ -15,7 +15,7 @@ public:
 //	设置迭代器指向当前元素的下一个-Next；
 	virtual void Next();
 //	获取当前元素-GetCurrentItem；
-	virtual bool GetCurrentItem(CClientInfo &item);
+	virtual CClientInfo * GetCurrentItem();
 //私有成员变量：
 private:
 //	记录当前访问到的元素位置-currentIndex；

@@ -32,72 +32,72 @@ CClientInfo & CClientInfo::operator=(const CClientInfo & paramClientInfo)
 	return *this;	
 }
 
-bool CClientInfo::GetId(int &rtId)
-{
-    rtId = id;
-    return true;
-}
-bool CClientInfo::SetId(const int &paramId)
-{
-    id = paramId;
-    return true;
-}
-
-bool CClientInfo::GetSignature(string &rtSignature)
-{
-    rtSignature = signature;
-    return true;
-}
-bool CClientInfo::SetSignature(const string &paramSignature)
-{
-    signature = paramSignature;
-    return true;
-}
-
-bool CClientInfo::GetState(int &rtState)
-{
-    rtState = state;
-    return true;
-}
-bool CClientInfo::SetState(const int &paramState)
-{
-    state = paramState;
-    return true;
-}
-
-bool CClientInfo::GetIp(string &rtIp)
-{
-    rtIp = ip;
-    return true;
-}
-bool CClientInfo::SetIp(const string &paramIp)
-{
-    ip = paramIp;
-    return true;
-}
-
-bool CClientInfo::GetPort(int &rtPort)
-{
-    rtPort = port;
-    return true;
-}
-bool CClientInfo::SetPort(const int &paramPort)
-{
-    port = paramPort;
-    return true;
-}
-
-bool CClientInfo::GetHeartbeatInterval(int &rtHeartbeat)
-{
-	rtHeartbeat = heartbeatInterval;
-    return true;
-}
-
-bool CClientInfo::SetHeartbeatInterval(const int &paramHeartbeat)
-{
-    heartbeatInterval = paramHeartbeat;
-    return true;
-}
+//bool CClientInfo::GetId(int &rtId)
+//{
+//    rtId = id;
+//    return true;
+//}
+//bool CClientInfo::SetId(const int &paramId)
+//{
+//    id = paramId;
+//    return true;
+//}
+//
+//bool CClientInfo::GetSignature(string &rtSignature)
+//{
+//    rtSignature = signature;
+//    return true;
+//}
+//bool CClientInfo::SetSignature(const string &paramSignature)
+//{
+//    signature = paramSignature;
+//    return true;
+//}
+//
+//bool CClientInfo::GetState(int &rtState)
+//{
+//    rtState = state;
+//    return true;
+//}
+//bool CClientInfo::SetState(const int &paramState)
+//{
+//    state = paramState;
+//    return true;
+//}
+//
+//bool CClientInfo::GetIp(string &rtIp)
+//{
+//    rtIp = ip;
+//    return true;
+//}
+//bool CClientInfo::SetIp(const string &paramIp)
+//{
+//    ip = paramIp;
+//    return true;
+//}
+//
+//bool CClientInfo::GetPort(int &rtPort)
+//{
+//    rtPort = port;
+//    return true;
+//}
+//bool CClientInfo::SetPort(const int &paramPort)
+//{
+//    port = paramPort;
+//    return true;
+//}
+//
+//bool CClientInfo::GetHeartbeatInterval(int &rtHeartbeat)
+//{
+//	rtHeartbeat = heartbeatInterval;
+//    return true;
+//}
+//
+//bool CClientInfo::SetHeartbeatInterval(const int &paramHeartbeat)
+//{
+//    heartbeatInterval = paramHeartbeat;
+//    return true;
+//}
 
 
 

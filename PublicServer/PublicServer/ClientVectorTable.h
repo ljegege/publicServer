@@ -18,11 +18,11 @@ public:
 //	删除客户机-DeleteClient；
 	virtual bool DeleteClient(const int & paramId);
 //	查找客户机-SearchClient；
-	virtual bool SearchClient(const int & paramId, CClientInfo & rtClientInfo);
+	virtual CClientInfo * SearchClient(const int & paramId);
 //	或者指定位置的客户机信息-GetClientByIndex；
-	virtual bool GetClientByIndex(const int & index, CClientInfo & rtClientInfo);	
+	virtual CClientInfo * GetClientByIndex(const int & index);	
 //	获取客户机的个数-GetClientCount；
-	virtual bool GetClientCount(int & rtCount);	
+	virtual int GetClientCount();	
 	virtual bool Clear();
 };
 
