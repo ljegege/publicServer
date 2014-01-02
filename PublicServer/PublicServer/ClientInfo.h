@@ -62,11 +62,11 @@ public:
 		ip = paramIp;
 	}
 
-	inline int GetPort()
+	inline int GetPort1()
 	{
 		return port;
 	}
-	inline void SetPort(const int &paramPort)
+	inline void SetPort1(const int &paramPort)
 	{
 		port = paramPort;
 	}

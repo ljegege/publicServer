@@ -1,37 +1,61 @@
 ﻿#include "PenetratingFirewall.h"
 #include "ClientTable.h"
-bool CPenetratingFirewall::Init(string initFilePath)
+#include <sstream>
+#include <fstream>
+using namespace std;
+
+CPenetratingFirewall::CPenetratingFirewall()
 {
+}
+
+CPenetratingFirewall::~CPenetratingFirewall()
+{
+}
+
+bool CPenetratingFirewall::Init(string initFilePath, const CClientInfo& userInfo)
+{
+	CClientInfo clientInfo;
+	int id;
+	string signature;
+	ifstream input(initFilePath);
+
+	selfInfo = userInfo;
+	CFactory *ptrFactory = CFactory::GetInstance();
+	ptrClientTable = ptrFactory->CreateClientTable(enumVecTable);
+	ptrSock = ptrFactory->CreateSocket(enumReliableSocket);
+
+
+	clientInfo.SetState(enumOffLine);	
+	while(input>>id>>signature){
+		clientInfo.SetId(id);
+		clientInfo.SetSignature(signature);		
+		ptrClientTable->AddClient(clientInfo);
+	}
+
+	ptrSock->Create(SOCK_DGRAM);
+	ptrSock->Bind(selfInfo.GetIp(), selfInfo.GetPort1());
+
 	return false;
 }
 //验证客户机身份-VerifyClient:
 bool CPenetratingFirewall::VerifyClient(CClientInfo &clientInfo) const
 {
-	//
-	//CIterator clientTableIterator(ptrClientTable);
-	//for(clientTableIterator.First(); !clientTableIterator.IsDone(); clientTableIterator.Next()){
-	//	clientTableIterator.GetCurrentItem(tmpClientInfo);
-	//	
-	//}
-	int clientID;
-	CClientInfo tmpClientInfo;
-	clientInfo.GetId(clientID);
-	string clientTableSig;
-	string paramSig;
+	return 	VerifyClient(clientInfo.GetId(), clientInfo.GetSignature());
+}
 
-	if(!ptrClientTable->SearchClient(clientID, tmpClientInfo)){
+bool CPenetratingFirewall::VerifyClient(const int &id, const string& signature) const
+{
+	CClientInfo *ptrClientInfo;
+	if(!(ptrClientInfo = ptrClientTable->SearchClient(id))){
 		return false;
 	}
-
-	tmpClientInfo.GetSignature(clientTableSig);
-	clientInfo.GetSignature(paramSig);
-	if(clientTableSig.compare(paramSig) == 0){
+	if(signature.compare(ptrClientInfo->GetSignature()) == 0){
 		return true;
 	}else {
 		return false;
 	}
-	
 }
+
 //接受请求函数-RecvCmd:
 bool CPenetratingFirewall::RecvCmd(CCmd& cmd)
 {
@@ -50,9 +74,7 @@ bool CPenetratingFirewall::RecvCmd(CCmd& cmd)
 //处理请求函数-DisposeCmd：
 bool CPenetratingFirewall::DisposeCmd(CCmd& cmd)
 {
-	int type;
-	cmd.GetType(type);
-	switch(type){
+	switch(cmd.GetType()){
 	case enumRegisterCmd:
 		{
 			return DisposeRegisterCmd(cmd);	 
@@ -80,15 +102,33 @@ CClientTable * CPenetratingFirewall::GetClientTable()
 //处理注册命令-DisposeRegisterCmd；
 bool CPenetratingFirewall::DisposeRegisterCmd(CCmd& cmd)
 {
-	int clientId;
-	CClientInfo clientInfo;
-	cmd.GetId(clientId);
-	if(ptrClientTable->SearchClient(clientId, clientInfo)){
-		string cmdSignature, clientSignagure;
-		cmd.getSignature(cmdSignature);
-		clientInfo.GetSignature(clientSignagure);
-		if(cmdSignature.compare(clientSignagure) == 0){
+	CClientInfo *ptrClientInfo;
+	if((ptrClientInfo = ptrClientTable->SearchClient(cmd.GetId()))){
+		if(cmd.GetSignature().compare(ptrClientInfo->GetSignature()) == 0){
+			// 更新客户机信息
+			ptrClientInfo->SetIp(cmd.GetIp());
+			ptrClientInfo->SetPort1(cmd.GetPort1());
+			ptrClientInfo->SetState(enumOnline);
+			// 填充用户返回给客户机的命令消息
+			cmd.SetType(enumRegisterCmdReply);
+			cmd.SetId(selfInfo.GetId());
+			cmd.SetSignature(selfInfo.GetSignature());			
+			
+			ostringstream  ostring;
+			ostring<<cmd.GetPort1();
+			string tmp = cmd.GetIp() + "|" + ostring.str();
+			cmd.SetMessage(tmp);
 
+			// 将消息发送给客户机
+			char buf[maxCmdLen];
+			int len = maxCmdLen;
+			if(cmd.Serialize(buf, len)){
+				if(ptrSock->Sendto(buf, len, cmd.GetIp(), cmd.GetPort1()) < 0){
+					return false;
+				}else{
+					return true;
+				}
+			}
 		}
 	}
 	return false;
@@ -96,11 +136,46 @@ bool CPenetratingFirewall::DisposeRegisterCmd(CCmd& cmd)
 //处理客户端获取自身对外IP和端口命令-DisposeGetIPandPortCmd
 bool CPenetratingFirewall::DisposeGetIPandPortCmd(CCmd& cmd)
 {
-	return false;
+	return DisposeRegisterCmd(cmd);
 }
 //处理客户机获取指定客户机对外的IP和端口命令-DisposeGetPeerIPandPortCmd；
 bool CPenetratingFirewall::DisposeGetPeerIPandPortCmd(CCmd& cmd)
 {
+	CClientInfo *ptrClientInfo;
+	if((ptrClientInfo = ptrClientTable->SearchClient(cmd.GetId()))){
+		if(cmd.GetSignature().compare(ptrClientInfo->GetSignature()) == 0){
+			// 更新客户机信息
+			ptrClientInfo->SetIp(cmd.GetIp());
+			ptrClientInfo->SetPort1(cmd.GetPort1());
+			ptrClientInfo->SetState(enumOnline);
+
+			istringstream istring(cmd.GetMessage());
+			int peerId;
+			istring >> peerId;
+			if((ptrClientInfo = ptrClientTable->SearchClient(peerId))){
+				// 填充用户返回给客户机的命令消息
+				cmd.SetType(enumRegisterCmdReply);
+				cmd.SetId(selfInfo.GetId());
+				cmd.SetSignature(selfInfo.GetSignature());	
+
+				ostringstream  ostring;
+				ostring<<ptrClientInfo->GetPort1();
+				string tmp = ptrClientInfo->GetIp() + "|" + ostring.str();
+				cmd.SetMessage(tmp);
+
+				// 将消息发送给客户机
+				char buf[maxCmdLen];
+				int len = maxCmdLen;
+				if(cmd.Serialize(buf, len)){
+					if(ptrSock->Sendto(buf, len, cmd.GetIp(), cmd.GetPort1()) < 0){
+						return false;
+					}else{
+						return true;
+					}
+				}
+			}
+		}
+	}
 	return false;
 }
 //处理客户机的心跳命令-DisposeHeartbeatCmd；

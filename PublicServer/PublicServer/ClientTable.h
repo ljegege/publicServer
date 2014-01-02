@@ -7,18 +7,18 @@ class CClientTable{
 public:
 //操作函数：
 //	初始化客户机列表-InitClientTable();
-	virtual bool InitClientTable();
+	virtual bool InitClientTable() = 0;
 //	添加客户机-AddClient；
-	virtual bool AddClient(const CClientInfo & paramClientInfo);
+	virtual bool AddClient(const CClientInfo & paramClientInfo) = 0;
 //	删除客户机-DeleteClient；
-	virtual bool DeleteClient(const int & paramId);
+	virtual bool DeleteClient(const int & paramId) = 0;
 //	查找客户机-SearchClient；
-	virtual CClientInfo * SearchClient(const int & paramId);
+	virtual CClientInfo * SearchClient(const int & paramId) = 0;
 //	或者指定位置的客户机信息-GetClientByIndex；
-	virtual CClientInfo * GetClientByIndex(const int & index);	
+	virtual CClientInfo * GetClientByIndex(const int & index) = 0;	
 //	获取客户机的个数-GetClientCount；
-	virtual int GetClientCount();	
-	virtual bool Clear();
+	virtual int GetClientCount() = 0;	
+	virtual bool Clear() = 0;
 };
 
 #endif

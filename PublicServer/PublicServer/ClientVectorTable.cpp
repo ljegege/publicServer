@@ -17,8 +17,7 @@ bool CClientVectorTable::AddClient(const CClientInfo & paramClientInfo)
 bool CClientVectorTable::DeleteClient(const int & paramId)
 {
 	for(vector<CClientInfo>::iterator iterClient = clientInfoVec.begin(); iterClient != clientInfoVec.end(); ++iterClient){
-		int rtId;			
-		if(iterClient->GetId(rtId) && rtId == paramId){
+		if(iterClient->GetId() == paramId){
 			clientInfoVec.erase(iterClient);
 			return true;
 		}
@@ -30,8 +29,8 @@ bool CClientVectorTable::DeleteClient(const int & paramId)
 CClientInfo * CClientVectorTable::SearchClient(const int & paramId)
 {
 	for(vector<CClientInfo>::iterator iterClient = clientInfoVec.begin(); iterClient != clientInfoVec.end(); ++iterClient){		
-		if(iterClient->GetId == paramId){
-			return iterClient;
+		if(iterClient->GetId() == paramId){
+			return &(*iterClient);
 		}
 	}
 	return NULL;	

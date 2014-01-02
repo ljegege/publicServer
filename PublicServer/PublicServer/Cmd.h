@@ -17,12 +17,12 @@ private:
 	string message;
 	string ip;
 	int port;
+	//操作函数：
+public:
 	// 构造函数
 	CCmd(int id = -1, string signature = "", int type = -1, string message = "", string ip = "", int port = -1);
 	CCmd(const CCmd& paramCmd);
 	CCmd & operator=(const CCmd & paramCmd);
-	//操作函数：
-public:
 	//	各个成员变量的Get和Set函数；
 	inline int GetId()
 	{
@@ -42,7 +42,7 @@ public:
 		signature = paramSignature;
 	}
 
-	inline int GetType(int &rtType)
+	inline int GetType()
 	{
 		return type;
 	}
@@ -81,8 +81,6 @@ public:
 	{
 		port = paramPort;
 	}
-
-
 
 	//	格式化命令-Serialize：将对象的内容格式化成char数组；
 	bool Serialize(char *rtBuf, int &len);
